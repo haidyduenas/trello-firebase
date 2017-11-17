@@ -1,0 +1,120 @@
+body{
+  background-color: #89609E;
+  background-size: cover;
+  position: relative;
+  height: 100%;
+}
+.create{
+  text-decoration: none;
+  font-size : 1.5em;
+  color: rgb(48, 37, 37)
+  
+}
+.main-header {
+  background: #745286;
+  line-height: 2.7em;
+  padding: 0 1.5em;
+  color: #fff;
+  position: relative;
+}
+
+.cont-icon{
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  padding: .3em .5em;
+  line-height: 1em;
+  margin: 0.5%;
+}
+.cont-icon span i{
+ color: white;
+ margin: 1%;
+}
+
+.logo img{
+  height: 43px;
+  margin: 0.5%;
+}
+
+.board{
+  color :#fff;
+  font-size: 1.5em;
+  margin-left: 10px;
+}
+
+/*===============Singin==============================*/
+
+.img-logo{
+  margin-top: 5%;
+  margin-bottom: 3%;
+}
+.input-sing{
+  width: 100%;
+  font-size: 1.5em;
+  height: 8vh;
+}
+
+.btn-sing{
+  color: #fff;
+  margin-bottom: 1%;
+  border: 2px solid #fff;
+  background-color :rgba(255, 255, 255, 0.15);
+}
+
+/*===============SingUp===============================*/
+.btn-singIn{
+  margin-top:2%; 
+  background-color :rgba(255, 255, 255, 0.15);
+}
+
+/*====================Board====================================*/
+
+.add{
+    color: #ccc;
+    width: 250px;
+    height: 35px;
+    display: block;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 5px 0px 10px 10px;
+    margin: 2%;
+}
+
+/*==============================My Board=============================================*/
+
+.littleBoard{
+  background: rgba(222, 225, 227, 0.9);
+  border-radius: 3px;
+  margin: 0 0.5em 1em 0.5em;
+  line-height: 1.75em;
+  overflow: hidden;
+  padding: 0.75em;
+  min-height: 5em;
+  display: inline-block;
+  width: 20%
+}
+
+.littleBoard p{
+  color: rgb(63, 59, 59);
+  font-weight: bolder;
+  font-size: 1.5em;
+}
+.cont-icon-user{
+  color: #fff;
+  line-height: 1.2em;
+  margin: 1%;
+  font-weight: bold;
+} 
+
+.inputBoard{
+  background: rgba(166, 128, 184, 0.5);
+  border-radius: 3px;
+  margin-top: 3.1%;
+  overflow: hidden;
+  padding: 0.75em;
+  min-height: 5em;
+  display: inline-block;
+  width: 20%;
+  position: absolute;
+  top: 50%;
+}
