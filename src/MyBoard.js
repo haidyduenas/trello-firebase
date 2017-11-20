@@ -12,13 +12,13 @@ const LittleBoard = ({item,index}) => {
 
 }
 
- const BoardsOn = ({mainBoards}) => {
+ const BoardsOn = ({boards}) => {
     return(
     <div className="container-fluid">
       <div className="row">
         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         {
-          mainBoards.map((item,index)=>{
+          boards.map((item,index)=>{
             return <LittleBoard key ={index} item={item}/>
           })
         }
@@ -29,7 +29,7 @@ const LittleBoard = ({item,index}) => {
     )
 }
 
-const MyBoard =({mainBoards,successLogin})=>{
+const MyBoard =({boards,successLogin})=>{
   return(
     <div className="container-fluid">
                  {
@@ -53,14 +53,14 @@ const MyBoard =({mainBoards,successLogin})=>{
               <span><i className="fa fa-user fa-2x" aria-hidden="true"></i></span>
               <NavLink to="board"><span className="board">My Boards</span></NavLink>
           </div>
-        <BoardsOn mainBoards={mainBoards}/>
+        <BoardsOn boards={boards}/>
 
       </div>
     </div>
   )
 }
 
-const mapToProps = ({mainBoards,successLogin}) => ({mainBoards,successLogin});
+const mapToProps = ({boards,successLogin}) => ({boards,successLogin});
 
 
 export default connect(mapToProps)(MyBoard)

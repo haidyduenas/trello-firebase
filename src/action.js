@@ -1,32 +1,8 @@
 import store from './store';
 import {auth, database, storage} from './firebase';
-export const addBoard = text => {
-   let oldList = store.getState().board;
-   const newList = oldList.concat({
-      id: oldList.length,
-      text: text
-   });
-   store.setState({
-      todos: newList
-   });
-   database.ref("user/"+ store.getState().user.id + "/boards/").push(text);
-};
-export const isClick = (e) =>{
-    store.setState({
-        isClick : true,
-    })
-}
 
-export const addComment = (name,comment) => {    
-        const Newtask = [...store.getState().task, {
-            name: name,
-            comment : comment,
-        }];
-    
-        store.setState({
-            task: Newtask
-        })
-    }
+/*****************************************Board***************************************************/
+
 
     
     export function signUp (fullname, email, pass) 
@@ -75,6 +51,7 @@ export const addComment = (name,comment) => {
     
              console.log ('full info ', fullUserInfo);
              store.setState ( {
+               
                 user: {
                    id : userObj.uid,
                    email :  fullUserInfo.email,
@@ -96,3 +73,49 @@ export const addComment = (name,comment) => {
           })
        }
     });
+
+    export function readBoard () {
+        database.ref('stages').on ('value', res => {
+           let stages = []
+           res.forEach ( snap  => {
+              const stage = snap.val();
+              stages.push (stage);
+           })
+           store.setState ({
+              stages : stages
+           }) 
+        });
+     
+        database.ref('task').on ('value', res => {
+           let task = [];
+           res.forEach ( snap  => {
+               const task = snap.val();
+               task.push (task)
+           })      
+           store.setState ({
+              task : task
+           }) 
+        });   
+     }
+     
+     export function  addStage (text) {
+         console.log("holi")
+     
+        let stages = [...store.getState().stages];
+        stages.push (  text )  
+        database.ref('stages').push (text);
+     }
+     
+     export function  addTask (stage, text) {
+        console.log ('addTask:', stage + ' - ' +  text);
+     
+        let task = [...store.getState().task];
+     
+        let newTask = {
+           id : store.getState().task.length,
+           title: text,
+           stage : stage
+        } 
+     
+        database.ref('task/' + newTask.id).set (newTask);
+     }

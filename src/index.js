@@ -10,6 +10,7 @@ import Board from './Board';
 import SingIn from './SingIn';
 import SingUp from './SingUp';
 import MyBoard from './MyBoard'
+import {readBoard} from './action'
 
 const Index =()=>(
     <Provider store={store}>
@@ -25,5 +26,6 @@ const Index =()=>(
         </HashRouter>
     </Provider>
 );
+readBoard ()
 ReactDOM.render(<Index />, document.getElementById('root'));
 registerServiceWorker();

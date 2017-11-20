@@ -2,59 +2,21 @@ import React from 'react';
 import { connect } from "redux-zero/react";
 import SingUp from './SingUp';
 import{Redirect} from 'react-router-dom'
-import {addBoard,isClick,addComment,signIn, signOut, signUp} from './action'
+import {addStage,signIn, signOut, signUp} from './action'
+import Stage from './Stage';
 
 
 
-const InputText =()=>{
-    const onSubmit = (e) => {
-      e.preventDefault();
-      addComment(this.nameInputRef.value, this.commentInputRef.value)
-    }
-    return(
-      <div className="col-lg-2 col-md-2 col-xs-2 input-data">
-        <form onSubmit={onSubmit}>
-        <div className=" form-group text-left">
-          <input  type="text" className="form-control" ref={(e) => this.nameInputRef = e}/>
-          </div>
-        <div className="form-group">
-          <textarea className="form-control" ref={(e) => this.commentInputRef = e} />
-        </div>
-        <button type="submit" className="btn btn-comment text-color">add commet</button>
-        </form>
-      </div>
-      )
-}
- const SingleComment =({oneComment,index})=>{
-   return(
-    <li key={index}>
-      <div>
-        {oneComment.name}
-      </div>
-      <div>
-        {oneComment.comment}
-      </div>
-    </li>
-   )
- }
-const Comments =({task}) =>{
-  return(
-    <div className="col-lg-12">
-    {
-      task.map((item,index)=>{
-        return <SingleComment key={index} oneComment={item} index={index}/>
-      })
-    }
-  </div>
-  )
-}
 
-const Board =({successLogin,task})=>{
+const FirstBoard =({successLogin,task,stages})=>{
+  const list = stages.map ( stage => {
+    return <Stage  key={stage} title={stage} 
+       task = {  task.filter ( e => e.stage === stage )}
+    />
+ });
   return(
     <div className="container-fluid text-center">
-             {
-            !successLogin  && <Redirect to = "/singin" />
-         }
+
         <div className="row">
         <div className="col-lg-12 col-md-12 main-header">
           <div className="col-lg-2 col-md-2 cont-icon">
@@ -70,14 +32,40 @@ const Board =({successLogin,task})=>{
               <span className="board" onClick = {signOut} >SignOut</span>
           </div>
         </div>
-        <InputText/>
         <div className="showComments">
-        <Comments task = {task}/>
+        <div className = "Board-container">
+        
+          <div className = "Board-column">
+             {list}
+          </div>
+          <div className = "Board-column">
+            <form onSubmit = { (e) => {
+               e.preventDefault();
+               addStage (this.stageInputRef.value);
+            }}>
+               <input type="text" ref = {e => this.stageInputRef = e}/>
+               <button type="submit">
+                  save list
+               </button>
+               </form>
+            </div>
+      </div>
         </div>
         </div>
       </div>
   )
 }
+const Board = ({successLogin,stages, task}) => {
+  console.log (stages);
+  console.log (task);
+  
+  return <div className="App">
+               {
+            !successLogin  && <Redirect to = "/singin" />
+         }
+      <FirstBoard successLogin={successLogin} stages={stages}  task = {task}/>
+  </div>
+};
 
-const mapToProps = ({successLogin,task}) => ({successLogin,task});
+const mapToProps = ({successLogin,task,stages}) => ({successLogin,task,stages});
 export default connect(mapToProps)(Board)
