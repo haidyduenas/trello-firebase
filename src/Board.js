@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from "redux-zero/react";
 import SingUp from './SingUp';
-import {addBoard,isClick,addComment} from './action';
+import{Redirect} from 'react-router-dom'
+import {addBoard,isClick,addComment,signIn, signOut, signUp} from './action'
 
 
 
@@ -48,9 +49,12 @@ const Comments =({task}) =>{
   )
 }
 
-const Board =({task})=>{
+const Board =({successLogin,task})=>{
   return(
     <div className="container-fluid text-center">
+             {
+            !successLogin  && <Redirect to = "/singin" />
+         }
         <div className="row">
         <div className="col-lg-12 col-md-12 main-header">
           <div className="col-lg-2 col-md-2 cont-icon">
@@ -59,6 +63,11 @@ const Board =({task})=>{
           </div>
           <div className="col-offset-2 col-lg-8 col-md-8 text-center logo">
               <img src="https://phoenix-trello.herokuapp.com/images/logo-11ecccd65d1c7977997eb6f0bc0002ad.png?vsn=d"/>
+          </div>
+ 
+         <div >
+              <span><i className="fa fa-sign-out fa-2x" aria-hidden="true"></i></span>
+              <span className="board" onClick = {signOut} >SignOut</span>
           </div>
         </div>
         <InputText/>
@@ -70,5 +79,5 @@ const Board =({task})=>{
   )
 }
 
-const mapToProps = ({task}) => ({task});
+const mapToProps = ({successLogin,task}) => ({successLogin,task});
 export default connect(mapToProps)(Board)

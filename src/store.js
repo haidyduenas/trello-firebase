@@ -57,7 +57,13 @@ let task = [
 const initialState = {
     mainBoards: Boards,
     task : task,
-    selectedItem : -1 
+    selectedItem : -1,
+    successLogin : false,
+    user : {
+       id : null,
+       email :  null,
+       fullname :  null,         
+    } 
 }
 
 const store = createStore(initialState)

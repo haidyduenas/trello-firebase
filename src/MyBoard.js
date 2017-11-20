@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "redux-zero/react";
-import {NavLink} from 'react-router-dom';
-import './App.css';
+import {Redirect,NavLink} from 'react-router-dom';
+import {addBoard,isClick,addComment,signIn, signOut, signUp} from './action'
 
 const LittleBoard = ({item,index}) => {
     return(
@@ -29,9 +29,12 @@ const LittleBoard = ({item,index}) => {
     )
 }
 
-const MyBoard =({mainBoards})=>{
+const MyBoard =({mainBoards,successLogin})=>{
   return(
     <div className="container-fluid">
+                 {
+            !successLogin  && <Redirect to = "/singin" />
+         }
       <div className="row">
         <div className="col-lg-12 col-md-12 main-header">
           <div className="col-lg-2 col-md-2 cont-icon">
@@ -40,6 +43,10 @@ const MyBoard =({mainBoards})=>{
           </div>
           <div className="col-offset-2 col-lg-8 col-md-8 text-center logo">
               <img src="https://phoenix-trello.herokuapp.com/images/logo-11ecccd65d1c7977997eb6f0bc0002ad.png?vsn=d"/>
+          </div>
+          <div >
+              <span><i className="fa fa-sign-out fa-2x" aria-hidden="true"></i></span>
+              <span className="board" onClick = {signOut} >SignOut</span>
           </div>
         </div>
         <div className="col-lg-2 col-md-2 cont-icon-user">
@@ -53,6 +60,7 @@ const MyBoard =({mainBoards})=>{
   )
 }
 
-const mapToProps = ({mainBoards}) => ({mainBoards});
+const mapToProps = ({mainBoards,successLogin}) => ({mainBoards,successLogin});
+
 
 export default connect(mapToProps)(MyBoard)
