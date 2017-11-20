@@ -62,7 +62,8 @@ const initialState = {
     user : {
        id : null,
        email :  null,
-       fullname :  null,         
+       fullname :  null,
+         
     } 
 }
 
