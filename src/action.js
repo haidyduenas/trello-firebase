@@ -89,8 +89,8 @@ import {auth, database, storage} from './firebase';
         database.ref('task').on ('value', res => {
            let task = [];
            res.forEach ( snap  => {
-               const task = snap.val();
-               task.push (task)
+               const tasks = snap.val();
+               task.push (tasks)
            })      
            store.setState ({
               task : task
