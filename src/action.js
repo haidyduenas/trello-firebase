@@ -1,121 +1,129 @@
 import store from './store';
 import {auth, database, storage} from './firebase';
+    
+export function signUp (fullname, email, pass) 
+{
 
-/*****************************************Board***************************************************/
+   auth.createUserWithEmailAndPassword (email, pass).then ( user => {
+      let newuser = {
+         fullname, email
+      }
+      database.ref ('users/' + user.uid).set (newuser);   
+      
+      database.ref ('users/' + user.uid).once ('value').then ( res => {
+         const fullUserInfo = res.val(); 
 
+         store.setState ( {
+            user: {
+               id : user.uid,
+               email :  fullUserInfo.email,
+               fullname :  fullUserInfo.fullname              
+            }
+         })
+      })
 
-    
-    export function signUp (fullname, email, pass) 
-    {
-       console.log ('signUp' + fullname + email + pass);
-    
-       auth.createUserWithEmailAndPassword (email, pass).then ( user => {
-          let newuser = {
-             fullname, email
-          }
-          database.ref ('users/' + user.uid).set (newuser);   
+   })
+   
+}
 
-          database.ref ('users/' + user.uid).once ('value').then ( res => {
-             const fullUserInfo = res.val(); 
-    
-             console.log ('full info ', fullUserInfo);
-             store.setState ( {
-                user: {
-                   id : user.uid,
-                   email :  fullUserInfo.email,
-                   fullname :  fullUserInfo.fullname,              
-                }
-             })
-          })
-    
-       })
-       
-    }
-    
-    export function signOut () {
-       auth.signOut();
-       store.setState ( {
-          successLogin : false,
-          user: {
-             id :'',
-             email :  ''
-          }
-       })
-    }
-    
-    export function signIn (user, pass) {
-       auth.signInWithEmailAndPassword(user, pass).then (userObj => {
-    
-          database.ref ('users/' + userObj.uid).once ('value').then ( res => {
-             const fullUserInfo = res.val(); 
-    
-             console.log ('full info ', fullUserInfo);
-             store.setState ( {
-               
-                user: {
-                   id : userObj.uid,
-                   email :  fullUserInfo.email,
-                   fullname :  fullUserInfo.fullname,              
-                }
-             })
-          })
-       })
-    }
-    
-    
-    auth.onAuthStateChanged(user => {
-       if (user) {
-          console.log('user', user);
-          let usersRef = database.ref('/users');
-          let userRef = usersRef.child(user.uid);
-          store.setState ( {
-             successLogin : true
-          })
-       }
-    });
+export function signOut () {
+   auth.signOut();
+   store.setState ( {
+      successLogin : false,
+      user: {
+         id :'',
+         email :  ''
+      }
+   })
+}
 
-    export function readBoard () {
-        database.ref('stages').on ('value', res => {
-           let stages = []
-           res.forEach ( snap  => {
-              const stage = snap.val();
-              stages.push (stage);
-           })
-           store.setState ({
-              stages : stages
-           }) 
-        });
-     
-        database.ref('task').on ('value', res => {
-           let task = [];
-           res.forEach ( snap  => {
-               const tasks = snap.val();
-               task.push (tasks)
-           })      
-           store.setState ({
-              task : task
-           }) 
-        });   
-     }
-     
-     export function  addStage (text) {
-         console.log("holi")
-     
-        let stages = [...store.getState().stages];
-        stages.push (  text )  
-        database.ref('stages').push (text);
-     }
-     
-     export function  addTask (stage, text) {
-        console.log ('addTask:', stage + ' - ' +  text);
-     
-        let task = [...store.getState().task];
-     
-        let newTask = {
-           id : store.getState().task.length,
-           title: text,
-           stage : stage
-        } 
-     
-        database.ref('task/' + newTask.id).set (newTask);
-     }
+export function addNewBoard (title, userId) {
+
+   database.ref ('boards/').push ({
+      title: title,
+      user_id: userId
+   }).then ( res => {
+   });   
+
+}
+
+export function signIn (user, pass) {
+   auth.signInWithEmailAndPassword(user, pass);
+}
+
+export function  addStage (text, board_id) {
+   let newobj = {
+      title: text, 
+      board_id : board_id
+   }
+   
+   database.ref('stages').push (newobj);
+}
+
+export function  addTask (stageId, text) {
+
+   let tasks = [...store.getState().tasks];
+
+   let newTask = {
+      id : store.getState().tasks.length,
+      title: text,
+      stageId : stageId
+   } 
+   database.ref('tasks/' + newTask.id).set (newTask);
+}
+
+auth.onAuthStateChanged(user => {
+   if (user) {
+      let usersRef = database.ref('/users');
+      let userRef = usersRef.child(user.uid);
+
+      database.ref ('users/' + user.uid).once ('value').then ( res => {
+         const fullUserInfo = res.val(); 
+         
+         store.setState ( {
+            successLogin : true,
+            user: {
+               id : user.uid,
+               email :  fullUserInfo.email,
+               fullname :  fullUserInfo.fullname               
+            }
+         })
+      });
+
+      database.ref('boards').on ('value', res => {
+         let boards = [];
+         res.forEach ( snap  => {
+             const board = snap.val();
+             board.id = snap.key;
+             boards.push (board)
+         })      
+         store.setState ({
+            boards : boards.filter (board => board.user_id === user.uid)
+         }) 
+      });  
+
+      database.ref('stages').on ('value', res => {
+         let stages = []
+         res.forEach ( snap  => {
+            const stage = snap.val();
+            stage.id = snap.key;
+            stages.push (stage);
+         })
+         store.setState ({
+            stages : stages
+         }) 
+      });
+   
+      database.ref('tasks').on ('value', res => {
+         let tasks = [];
+         res.forEach ( snap  => {
+             const task = snap.val();
+             tasks.push (task)
+         })      
+         store.setState ({
+            tasks : tasks
+         }) 
+      });  
+
+   }
+});
